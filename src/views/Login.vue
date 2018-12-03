@@ -15,7 +15,7 @@
 </template>
 
 <script>
-  import { requestLogin } from '../api/api';
+  import { Login } from '../api/api';
   export default {
     data() {
       var validateUse = (rule, value, callback) => {
@@ -56,16 +56,16 @@
           if (valid) {
             this.logining = true;
             var loginParams = { username: this.ruleForm2.account, password: this.ruleForm2.checkPass };
-            requestLogin(loginParams).then(data => {
+            Login(loginParams).then(data => {
               this.logining = false;
-              let { msg, code, user } = data;
-              if (code !== 200) {
+              let { id, usename, tel,password,level } = data;
+              if (!id) {
                 this.$message({
-                  message: msg,
+                  message: '用户名或密码错误',
                   type: 'error'
                 });
               } else {
-                sessionStorage.setItem('user', JSON.stringify(user));
+                sessionStorage.setItem('user', JSON.stringify(usename));
                 this.$router.push({ path: '/main' });
               }
             });

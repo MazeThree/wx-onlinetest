@@ -1,10 +1,17 @@
 import axios from 'axios';
+import qs from 'qs';
 
 let base = '';
 
 axios.defaults.headers = {
     'Content-Type': 'application/json;charset=UTF-8'
 }
+
+var instance = axios.create({ 
+    headers: {'content-type': 'application/x-www-form-urlencoded'} }); 
+
+// 获取php后台返回数据
+export const Login = params => { return instance.post('/api/wx/login.php',qs.stringify(params)).then(res=>res.data); };
 
 export const requestLogin = params => { return axios.post(`${base}/login`, params).then(res => res.data); };
 
