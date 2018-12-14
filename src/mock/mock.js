@@ -1,6 +1,6 @@
 import axios from 'axios';
 import MockAdapter from 'axios-mock-adapter';
-import { LoginUsers, Users, Users1} from './data/user';
+import { Users, Users1} from './data/user';
 let _Users = Users;
 let _Users1 = Users1;
 
@@ -22,28 +22,28 @@ export default {
       msg: 'failure'
     });
 
-    //登录
-    mock.onPost('/login').reply(config => {
-      let {username, password} = JSON.parse(config.data);
-      return new Promise((resolve, reject) => {
-        let user = null;
-        setTimeout(() => {
-          let hasUser = LoginUsers.some(u => {
-            if (u.username === username && u.password === password) {
-              user = JSON.parse(JSON.stringify(u));
-              user.password = undefined;
-              return true;
-            }
-          });
+    // //登录
+    // mock.onPost('/login').reply(config => {
+    //   let {username, password} = JSON.parse(config.data);
+    //   return new Promise((resolve, reject) => {
+    //     let user = null;
+    //     setTimeout(() => {
+    //       let hasUser = LoginUsers.some(u => {
+    //         if (u.username === username && u.password === password) {
+    //           user = JSON.parse(JSON.stringify(u));
+    //           user.password = undefined;
+    //           return true;
+    //         }
+    //       });
 
-          if (hasUser) {
-            resolve([200, { code: 200, msg: '请求成功', user }]);
-          } else {
-            resolve([200, { code: 500, msg: '账号或密码错误' }]);
-          }
-        }, 1000);
-      });
-    });
+    //       if (hasUser) {
+    //         resolve([200, { code: 200, msg: '请求成功', user }]);
+    //       } else {
+    //         resolve([200, { code: 500, msg: '账号或密码错误' }]);
+    //       }
+    //     }, 1000);
+    //   });
+    // });
 
     //获取用户列表
     mock.onGet('/user/list').reply(config => {
@@ -76,7 +76,21 @@ export default {
         }, 1000);
       });
     });
-  
+  //  //获取班级列表
+  //  mock.onGet('/classes/get').reply(config => {
+  //   let {name} = config.params;
+  //   let mockUsers = _classinfo.filter(user => {
+  //     if (name && user.name.indexOf(name) == -1) return false;
+  //     return true;
+  //   });
+  //   return new Promise((resolve, reject) => {
+  //     setTimeout(() => {
+  //       resolve([200, {
+  //         users: mockUsers
+  //       }]);
+  //     }, 1000);
+  //   });
+  // });
 
     //获取用户列表（分页）
     mock.onGet('/user/listpage').reply(config => {

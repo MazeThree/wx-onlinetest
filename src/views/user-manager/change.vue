@@ -4,7 +4,7 @@
 		<el-col :span="24" class="toolbar" style="padding-bottom: 0px;">
 			<el-form :inline="true" :model="filters">
 				<el-form-item>
-					<el-input v-model="filters.name" placeholder="试题名称"></el-input>
+					<el-input v-model="filters.name" placeholder="请输入查询账户"></el-input>
 				</el-form-item>
 				<el-form-item>
 					<el-button type="primary" v-on:click="getUser">查询</el-button>
@@ -14,7 +14,7 @@
 
 		<!--列表-->
 		<template>
-			<el-table :data="users" highlight-current-row v-loading="loading" style="width: 100%;">
+			<el-table :data="users" highlight-current-row v-loading="loading" style="width: 100%;" v-if="hide">
 				<el-table-column type="index" width="60">
 				</el-table-column>
 				<el-table-column prop="name" label="姓名" width="120" sortable>
@@ -27,17 +27,6 @@
 				</el-table-column>
 				<el-table-column prop="addr" label="地址" min-width="180" sortable>
 				</el-table-column>
-        <el-table-column label="操作">
-      <template slot-scope="scope">
-        <el-button
-          size="mini"
-          @click="handleEdit(scope.$index, scope.row)">查看详情</el-button>
-        <el-button
-          size="mini"
-          type="danger"
-          @click="handleDelete(scope.$index, scope.row)">删除</el-button>
-      </template>
-  </el-table-column>
 			</el-table>
 		</template>
 
@@ -45,9 +34,11 @@
 </template>
 <script>
 	import { getUserList } from '../../api/api';
+	//import NProgress from 'nprogress'
 	export default {
 		data() {
 			return {
+                hide:true,
 				filters: {
 					name: ''
 				},
@@ -63,6 +54,7 @@
 			},
 			//获取用户列表
 			getUser: function () {
+                this.hide=false;
 				let para = {
 					name: this.filters.name
 				};
@@ -73,15 +65,8 @@
 					this.loading = false;
 					//NProgress.done();
 				});
-      },
-      handleEdit(index, row) {
-		//console.log(index, row.id);
-		this.$router.push({name:'试卷详情'})
-      },
-      handleDelete(index, row) {
-        console.log(index, row);
-      }
-    },
+			}
+		},
 		mounted() {
 			this.getUser();
 		}

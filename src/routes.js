@@ -2,15 +2,24 @@ import Login from './views/Login.vue'
 import NotFound from './views/404.vue'
 import Home from './views/Home.vue'
 import Main from './views/Main.vue'
+
+//班级管理
 import Classes from './views/class-manager/classes.vue'
 import Create from './views/class-manager/create.vue'
 import user from './views/class-manager/user.vue'
-import Page4 from './views/nav2/Page4.vue'
-import Page5 from './views/nav2/Page5.vue'
+//账户管理
+import userinfo from './views/user-manager/info.vue'
+import usernew from './views/user-manager/new.vue'
+import change from './views/user-manager/change.vue'
 
-//添加试题
+//试卷管理
+import newpaper from './views/testpaper/new.vue'
+import paperlist from './views/testpaper/paperlist.vue'
+import paperdetial from './views/testpaper/detial.vue'
+
+
+//试题管理
 import Test from './views/test-manager/test.vue'
-import TestPaper from './views/test-manager/test-paper.vue'
 import Question  from './views/test-manager/test-question.vue'
 import TestDetial  from './views/test-manager/test-detial.vue'
 
@@ -18,6 +27,7 @@ import TestDetial  from './views/test-manager/test-detial.vue'
 import Classinfo from './views/class-info/class-info.vue'
 import info from './views/class-info/info.vue'
 import Member from './views/class-info/member.vue'
+import class_test from './views/class-info/class-test.vue'
 
 let routes = [
     {
@@ -39,6 +49,7 @@ let routes = [
         children:[
             {path:'/info/:id', component: info, name: 'info'},
             {path:'/member/:id', component: Member, name: 'member'},
+            {path:'/test/:id', component: class_test, name: 'test'},
         ],
         hidden:true
     },
@@ -66,11 +77,24 @@ let routes = [
     {
         path: '/',
         component: Home,
-        name: '试题批阅',
+        name: '试卷批阅',
         iconCls: 'fa fa-id-card-o',
         children: [
-            { path: '/page4', component: Page4, name: '按班级批阅' },
-            { path: '/page5', component: Page5, name: '按分类批阅' }
+            { path: '/userinfo', component: userinfo, name: '按班级批阅' },
+            { path: '/usernew', component: usernew, name: '按分类批阅' }
+        ]
+    },
+    {
+        path: '/',
+        component: Home,
+        name: '试卷管理',
+        iconCls: 'el-icon-message',//图标样式class
+        children: [
+            { path: '/newpaper', component: newpaper, name: '添加试卷' },
+            { path: '/paperlist', component: paperlist, name: '已有试卷' },
+            { path: '/paperdetial/:test_id', component: paperdetial, name: '试卷详情',hidden:true },
+            { path: '/user', component: user, name: '列表111' },
+    
         ]
     },
     {
@@ -80,9 +104,7 @@ let routes = [
         iconCls: 'fa fa-address-card',
         children: [
             { path: '/test', component: Test, name: '已有试题' },
-            { path: '/test-paper', component: TestPaper, name: '添加试卷' },
-            { path: '/test-question', component: Question, name: '添加试题' },
-            { path: '/test-detial/:testid', component: TestDetial, name: '试卷详情',hidden:true},
+            { path: '/test-question', component: Question, name: '添加试题' }
         ]
     },
     {
@@ -91,8 +113,9 @@ let routes = [
         name: '账户管理',
         iconCls: 'fa fa-id-card-o',
         children: [
-            { path: '/page4', component: Page4, name: '信息修改' },
-            { path: '/page5', component: Page5, name: '添加新用户' }
+            { path: '/userinfo', component: userinfo, name: '信息修改' },
+            { path: '/usernew', component: usernew, name: '添加新用户' },
+            { path: '/change', component:change, name: '用户管理' },
         ]
     },
     {

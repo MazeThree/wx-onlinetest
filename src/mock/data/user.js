@@ -31,5 +31,14 @@ for (let i = 0; i < 35; i++) {
   }));
 }
 
+// const classinfo = [];
+// for (let i = 0; i < 5; i++) {
+//   classinfo.push(Mock.mock({
+//     id: Mock.Random.id(),
+//     'name|2-6': 测试一二三四班,
+//     'desc|10-15': 奥术大师大所多啊
+//   }));
+// }
 
-export { LoginUsers, Users, Users1 };
+
+export {  Users, Users1 };

@@ -16,9 +16,9 @@
             <span>{{ props.row.way }}</span>
           </el-form-item>
           <el-form-item label="成员数">
-            <span>{{ props.row.membere }}</span>
+            <span>{{ props.row.member }}</span>
           </el-form-item>
-          <el-form-item label="商品描述">
+          <el-form-item label="班级描述">
             <span>{{ props.row.desc }}</span>
           </el-form-item>
         </el-form>
@@ -54,43 +54,44 @@
   export default {
     data() {
       return {
-        tableData: [{
-          id: '12987122',
-		  name: '好滋好味鸡蛋仔',
-		  time:'2018年11月27日16:34:24',
-		  way:'允许任何人加入',
-		  member:33,
-          desc: '荷兰优质淡奶',
-		},
-		{
-          id: '12987122',
-		  name: '好滋好味鸡蛋仔',
-		  time:'2018年11月27日16:34:24',
-		  way:'允许任何人加入',
-		  member:33,
-          desc: '荷兰优质淡奶',
-		},
-		{
-          id: '12987122',
-		  name: '好滋好味鸡蛋仔',
-		  time:'2018年11月27日16:34:24',
-		  way:'允许任何人加入',
-		  member:33,
-          desc: '荷兰优质淡奶',
-		},
-		{
-          id: '12987122',
-		  name: '好滋好味鸡蛋仔',
-		  time:'2018年11月27日16:34:24',
-		  way:'允许任何人加入',
-		  member:33,
-          desc: '荷兰优质淡奶',
-		},]
-      }
+        tableData: [
+          {
+            id: '12987122',
+            name: '测试班',
+            time:'2018年11月27日16:34:24',
+            way:'允许任何人加入',
+            member:33,
+            desc: '测试班',
+          },
+          {
+            id: '12987122',
+            name: '测试班',
+            time:'2018年11月27日16:34:24',
+            way:'允许任何人加入',
+            member:33,
+            desc: '测试班',
+          },
+          {
+              id: '12987122',
+              name: '测试班',
+              time:'2018年11月27日16:34:24',
+              way:'测试班',
+              member:33,
+              desc: '测试班',
+          },
+          {
+            id: '12987122',
+            name: '测试班',
+            time:'2018年11月27日16:34:24',
+            way:'允许任何人加入',
+            member:33,
+            desc: '测试班',
+          },]
+        }
 	},
     methods: {
       handleEdit(index, row) {
-		console.log(index, row.id);
+		//console.log(index, row.id);
 		this.$router.push({name:'info',params:{id:row.id}})
       },
       handleDelete(index, row) {

@@ -8,7 +8,7 @@
             <!-- index对应跳转的子路由名称（index作为name跳转参数传递），不可随意变更 -->
             <el-menu-item index="info">班级信息</el-menu-item>
             <el-menu-item index="member">班级成员</el-menu-item>
-            <el-menu-item index="454">班级试题</el-menu-item>
+            <el-menu-item index="test">班级试卷</el-menu-item>
         </el-menu>
     </el-col>
 </el-row>
