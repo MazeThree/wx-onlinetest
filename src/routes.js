@@ -93,7 +93,7 @@ let routes = [
             { path: '/newpaper', component: newpaper, name: '添加试卷' },
             { path: '/paperlist', component: paperlist, name: '已有试卷' },
             { path: '/paperdetial/:test_id', component: paperdetial, name: '试卷详情',hidden:true },
-            { path: '/user', component: user, name: '列表111' },
+            { path: '/user', component: user, name: '已发布试题卷' },
     
         ]
     },

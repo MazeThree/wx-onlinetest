@@ -110,7 +110,7 @@
 			if (user) {
 				user = JSON.parse(user);
 				this.sysUserName = user || '';
-				this.sysUserAvatar = 'https://raw.githubusercontent.com/taylorchen709/markdown-images/master/vueadmin/user.png' || '';
+				this.sysUserAvatar = '../static/images/y.jpg' || '';
 			}
 		}
 	}

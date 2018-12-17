@@ -11,9 +11,8 @@ var instance = axios.create({
     headers: {'content-type': 'application/x-www-form-urlencoded'} }); 
 
 // 获取php后台返回数据
-//
 
-//一定要用qs的方法序列化参数，否则无法传递
+//post方法一定要用qs的方法序列化参数，否则参数无法传递
 
 export const Login = params => { return instance.post('/api/wx/login.php',qs.stringify(params)).then(res=>res.data); };
 
@@ -22,6 +21,9 @@ export const test_new = params => { return instance.post('/api/wx/testpaper/new.
 export const getPaperList= params =>{return instance.get('/api/wx/testpaper/getpaperlist.php').then(res=>res.data);};
 
 export const getpaperinfo = params =>{ return instance.post('/api/wx/testpaper/getinfo.php',qs.stringify(params)).then(res=>res.data);};
+
+// 试卷试题添加
+export const add_que = params =>{ return instance.post('/api/wx/testpaper/add_que.php',qs.stringify(params)).then(res=>res.data);};
 
 // 更新试卷信息
 export const update = params =>{ return instance.post('/api/wx/testpaper/updateinfo.php',qs.stringify(params)).then(res=>res.data);};
