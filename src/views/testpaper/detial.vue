@@ -98,23 +98,23 @@
         <div>
         <el-radio label="A" v-model="item.correct_option" >选项A </el-radio>
         <el-input type="textarea" style="width:40%;" placeholder="请输入试题，最大150字" autosize max="150"
-        v-model="item.optionA"
+        v-model="item.option1"
         ></el-input>
         </div>
         <div>
         <el-radio label="B" v-model="item.correct_option">选项B </el-radio>
         <el-input type="textarea" style="width:40%;" placeholder="请输入试题，最大150字" autosize max="150"
-        v-model="item.optionB"></el-input>
+        v-model="item.option2"></el-input>
         </div>
         <div>
         <el-radio label="C" v-model="item.correct_option">选项C </el-radio>
         <el-input type="textarea" style="width:40%;" placeholder="请输入试题，最大150字" autosize max="150"
-        v-model="item.optionC"></el-input>
+        v-model="item.option3"></el-input>
         </div>
         <div>
         <el-radio label="D" v-model="item.correct_option">选项D </el-radio>
         <el-input type="textarea" style="width:40%;" placeholder="请输入试题，最大150字" autosize max="150"
-        v-model="item.optionD"></el-input>
+        v-model="item.option4"></el-input>
         </div>
         <div>
         参考答案：
@@ -129,19 +129,19 @@
       <div v-else-if="item.type==2"  class="option">
         <div>
         <el-checkbox label="A" v-model="item.correct_option">选项A </el-checkbox>
-        <el-input type="textarea" style="width:40%;" placeholder="请输入试题，最大150字" autosize max="150"></el-input>
+        <el-input type="textarea" style="width:40%;" placeholder="请输入试题，最大150字" autosize max="150" v-model="item.option1"></el-input>
         </div>
         <div>
         <el-checkbox label="B" v-model="item.correct_option">选项B </el-checkbox>
-        <el-input type="textarea" style="width:40%;" placeholder="请输入试题，最大150字" autosize max="150"></el-input>
+        <el-input type="textarea" style="width:40%;" placeholder="请输入试题，最大150字" autosize max="150" v-model="item.option2"></el-input>
         </div>
         <div>
         <el-checkbox label="C" v-model="item.correct_option">选项C </el-checkbox>
-        <el-input type="textarea" style="width:40%;" placeholder="请输入试题，最大150字" autosize max="150"></el-input>
+        <el-input type="textarea" style="width:40%;" placeholder="请输入试题，最大150字" autosize max="150" v-model="item.option3"></el-input>
         </div>
         <div>
         <el-checkbox label="D" v-model="item.correct_option">选项D </el-checkbox>
-        <el-input type="textarea" style="width:40%;" placeholder="请输入试题，最大150字" autosize max="150"></el-input>
+        <el-input type="textarea" style="width:40%;" placeholder="请输入试题，最大150字" autosize max="150" v-model="item.option4"></el-input>
         </div>
         <div>
         <el-checkbox-group v-model="item.correct_option">
@@ -184,7 +184,36 @@
     </el-card>
   </el-tab-pane>
 
-  <el-tab-pane label="试卷发布">添加试卷到班级</el-tab-pane>
+  <el-tab-pane label="试卷发布">  
+    <el-select
+      v-model="value9"
+      multiple
+      filterable
+      remote
+      collapse-tags
+      reserve-keyword
+      placeholder="请输入班级名或id"
+      :remote-method="remoteMethod"
+      :loading="sub"
+      style="width:50%">
+    <el-option
+      v-for="item in options4"
+      :key="item.class_id"
+      :label="item.class_name"
+      :value="item.class_id">
+    </el-option>
+  </el-select>
+  <el-button type="primary" @click="issue()">试题发布</el-button>
+  <el-card class="box-card" style="margin-top:10px;">
+    <div slot="header" class="clearfix">
+      <span>已选班级</span>
+      <el-button style="float: right; padding: 3px 0" type="text">操作按钮</el-button>
+    </div>
+    <div v-for="item in value9" :key="item.vlaue" class="text item">
+      {{'班级ID ' + item }}
+    </div>
+  </el-card>
+  </el-tab-pane>
 
   <el-tab-pane label="参考人员">
       <div class="table">
@@ -230,7 +259,7 @@
 </template>
 
 <script>
-import {getpaperinfo,getpapermember,update,add_que} from '../../api/api'
+import {getpaperinfo,getpapermember,update,add_que,getclasslist,paperissue} from '../../api/api'
 import { log, callbackify } from 'util';
   export default {
     data() {
@@ -240,36 +269,7 @@ import { log, callbackify } from 'util';
           //设置只读属性
         readonly:true,
         //存储试卷试题信息
-        queForm:[{
-          question:'啧啧啧啧啧啧',
-          type:'1',
-          optionA:'xx',
-          optionB:'xx',
-          optionC:'xx',
-          optionD:'xx',
-          correct_option:'A',
-          score:'2'
-        },
-        {
-          question:'啧啧啧啧啧啧',
-          type:'2',
-          option1:'xx',
-          option2:'xx',
-          option3:'xx',
-          option4:'xx',
-          correct_option:['A','B'],
-          score:'2'
-        },
-        {
-          question:'啧啧啧啧啧啧',
-          type:'3',
-          option1:'xx',
-          option2:'xx',
-          option3:'xx',
-          option4:'xx',
-          correct_option:'A',
-          score:'2'
-        }],
+        queForm:[],
         //存储试卷信息
         ruleForm: {
           msg:"暂时无法获取数据"
@@ -298,6 +298,14 @@ import { log, callbackify } from 'util';
             { max:150, message: '最多输入150个字符', trigger: 'blur' }
           ]
         },
+        // 班级列表
+        //查询列表
+        options4: [],
+        // 选中列表
+        value9: [],
+        //远程信息存储
+        list: [],
+// 已有成员
         tableData3: [{
           date: '2016-05-03',
           name: '王小虎',
@@ -371,21 +379,13 @@ import { log, callbackify } from 'util';
           option2:'xx',
           option3:'xx',
           option4:'xx',
-          correct_option:'A',
+          correct_option:['A'],
           score:'2'
           // key: Date.now()
         });
       },
       //提交确认
 			sub_que: function () {
-				// var _this = this;
-				// this.$confirm('确认退出吗?', '提示', {
-				// 	//type: 'warning'
-				// }).then(() => {
-				// 	sessionStorage.removeItem('user');
-				// 	_this.$router.push('/login');
-				// }).catch(() => {
-        // });
         this.$confirm('将提交至数据库,请确认试题完善后提交,提交后试题不可修改，请慎重选择, 是否继续?', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
@@ -419,11 +419,82 @@ import { log, callbackify } from 'util';
       //暂存功能
       open: function () {
 				this.$message('已临时保存，但未提交至数据库');
+      },
+      //获取班级列表
+      getclassinfo(){
+        getclasslist().then(data =>{
+          for(let i=0;i<data.length;i++){
+            delete data[i].class_time;
+            delete data[i].class_join;
+            delete data[i].class_desc;
+          };
+            this.list=data;
+            //console.log(this.list);
+        })
+      },
+      //班级添加发布的查询方法绑定
+      remoteMethod(query) {
+        if (query !== '') {
+          var re = /^[0-9]+.?[0-9]*/;
+          if(re.test(query)){
+            this.loading = true;
+          setTimeout(() => {
+            this.loading = false;
+            this.options4 = this.list.filter(item => {
+              return item.class_id.toLowerCase()
+                .indexOf(query.toLowerCase()) > -1;
+            });
+          }, 200);
+          }else{
+          this.loading = true;
+          setTimeout(() => {
+            this.loading = false;
+            this.options4 = this.list.filter(item => {
+              return item.class_name.toLowerCase()
+                .indexOf(query.toLowerCase()) > -1;
+            });
+          }, 200);
+          }
+        } else {
+          this.options4 = [''];
+        }
+      },
+      // 试卷发布
+      issue(){
+        this.$confirm('将发布试题到选中班级, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+         var Params = this.value9;
+         //console.log(Params);
+            paperissue(Params).then(data => {
+              let { code,msg } = data;
+              if (code==1) {
+                this.status=false,
+                this.$message({
+                  message:"提交成功",
+                  type: 'success'
+                });
+              } else {
+                this.$message({
+                  message:"提交失败",
+                  type:'error',
+                });
+              }
+            }); 
+        }).catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消提交'
+          });          
+        });
       }
     },
     mounted() {
         this.getinfo();
-        sessionStorage.setItem("paper_id",this.$route.params.test_id);
+        this.getclassinfo();
+        sessionStorage.setItem("paper_id",this.$route.params.test_id);        
       }
   }
 </script>

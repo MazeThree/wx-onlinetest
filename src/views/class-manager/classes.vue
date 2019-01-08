@@ -36,21 +36,23 @@
     </el-table-column>
 	<el-table-column label="描述" prop="desc">
     </el-table-column>
-	<el-table-column label="操作">
-      <template slot-scope="scope">
-        <el-button
-          size="mini"
-          @click="handleEdit(scope.$index, scope.row)">班级管理</el-button>
-        <el-button
-          size="mini"
-          type="danger"
-          @click="handleDelete(scope.$index, scope.row)">删除</el-button>
-      </template>
+  <el-table-column
+      label="操作">
+    <template slot-scope="scope">
+      <el-button
+        size="mini"
+        @click="handleEdit(scope.$index, scope.row)">班级管理</el-button>
+      <el-button
+        size="mini"
+        type="danger"
+        @click="handleDelete(scope.$index, scope.row)">删除</el-button>
+    </template>
   </el-table-column>
   </el-table>
 </template>
 
 <script>
+import {getclasslist} from '../../api/api'
   export default {
     data() {
       return {
@@ -70,34 +72,44 @@
             way:'允许任何人加入',
             member:33,
             desc: '测试班',
-          },
-          {
-              id: '12987122',
-              name: '测试班',
-              time:'2018年11月27日16:34:24',
-              way:'测试班',
-              member:33,
-              desc: '测试班',
-          },
-          {
-            id: '12987122',
-            name: '测试班',
-            time:'2018年11月27日16:34:24',
-            way:'允许任何人加入',
-            member:33,
-            desc: '测试班',
-          },]
+          }],
+          classlist:[]
         }
 	},
-    methods: {
-      handleEdit(index, row) {
-		//console.log(index, row.id);
-		this.$router.push({name:'info',params:{id:row.id}})
-      },
-      handleDelete(index, row) {
-        console.log(index, row);
+  methods: {
+    handleEdit(index, row) {
+      //console.log(index, row.id);
+      this.$router.push({name:'info',params:{id:row.id}})
+    },
+    handleDelete(index, row) {
+      console.log(index, row);
+    },
+    getList: function (){
+
+      getclasslist({date:1}).then((data) => {
+        //班级列表暂时保留，方便后期更改
+        this.classlist=data;
+        //console.log(data);
+        //将获取值循环传入tableData展示
+        for(var i in data){
+          // var id=data[i].class_id;
+          // console.log(id);
+          this.tableData.push({
+            id:data[i].class_id,
+            name: data[i].class_name,
+            time:data[i].class_time,
+            way:data[i].class_join,
+            member:33,
+            desc: data[i].class_desc,
+          });
+        }
+        });
       }
-    }
+  },
+  mounted() {
+      this.tableData=[];
+			this.getList();
+		}
   }
 </script>
 

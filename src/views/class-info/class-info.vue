@@ -14,6 +14,13 @@
 </el-row>
     <el-row type="flex" justify="center">
         <el-col :span="18">
+            <div class="bread">
+            <el-breadcrumb separator-class="el-icon-arrow-right">
+            <el-breadcrumb-item :to="{ path: '/main' }">返回首页</el-breadcrumb-item>
+            <el-breadcrumb-item>班级空间</el-breadcrumb-item>
+            <el-breadcrumb-item >{{activename}}</el-breadcrumb-item>
+            </el-breadcrumb>
+            </div>
             <transition name="fade" mode="out-in">
                 <router-view></router-view>
             </transition>
@@ -27,11 +34,13 @@
 export default {
     data() {
       return {
-        activeIndex: 'info'
+        activeIndex: 'info',
+        activename:'info',
       };
     },
     methods: {
       handleSelect(key) {
+          this.activename=key;
           this.$router.push({
             name:key,
             params:{
@@ -53,6 +62,14 @@ export default {
         overflow: hidden;
         color: rgb(74, 111, 214);
         }  
+}
+.bread{
+    height: 25px;
+    margin: 20px 0;
+    border-bottom: 1px dashed gray;
+    span{
+        font-size:16px;
+    }
 }
 
 </style>
