@@ -52,7 +52,7 @@
 </template>
 
 <script>
-import {getclasslist} from '../../api/api'
+import {getclassinfo} from '../../api/api'
   export default {
     data() {
       return {
@@ -86,7 +86,7 @@ import {getclasslist} from '../../api/api'
     },
     getList: function (){
 
-      getclasslist({date:1}).then((data) => {
+      getclassinfo({date:1}).then((data) => {
         //班级列表暂时保留，方便后期更改
         this.classlist=data;
         //console.log(data);

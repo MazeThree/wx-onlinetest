@@ -11,11 +11,11 @@
 			</el-select>
 		</el-form-item>
 		<el-form-item label="班级性质">
-			<el-checkbox-group v-model="form.typ">
-				<el-checkbox label="临时班" name="type"></el-checkbox>
-				<el-checkbox label="课堂作业" name="type"></el-checkbox>
-				<el-checkbox label="集中考试" name="type"></el-checkbox>
-				<el-checkbox label="问卷调查" name="type"></el-checkbox>
+			<el-checkbox-group v-model="form.type1">
+				<el-checkbox label="临时班1" name="type1"></el-checkbox>
+				<el-checkbox label="课堂作业" name="type2"></el-checkbox>
+				<el-checkbox label="集中考试" name="type3"></el-checkbox>
+				<el-checkbox label="问卷调查" name="type4"></el-checkbox>
 			</el-checkbox-group>
 		</el-form-item>
 		<el-form-item label="班级备注">
@@ -37,6 +37,7 @@ import { class_new } from '../../api/api';
 				form: {
 					name: '',
 					type: '0',
+					type1:[],
 					// type:[],//不存入数据库，暂时不用
 					desc: '由xxxx创建'
 				}

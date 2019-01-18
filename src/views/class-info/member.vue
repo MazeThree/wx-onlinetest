@@ -4,10 +4,10 @@
 	<el-col :span="24" class="toolbar" style=" padding-bottom: 0px;">
 		<el-form :inline="true" style="float:left">
 			<el-form-item>
-				<el-input  placeholder="姓名"></el-input>
+				<el-input  placeholder="姓名或id" v-model="search"></el-input>
 			</el-form-item>
 			<el-form-item>
-				<el-button type="primary">查询</el-button>
+				<el-button type="primary" @click="exportExcel ()" class="el-icon-upload">导出数据</el-button>
 			</el-form-item>
 		</el-form>
 
@@ -23,8 +23,9 @@
 	<!--列表-->
 	<template>
 		<el-table
+			id="out-table"
 			ref="multipleTable"
-			:data="tableData3"
+			:data="tableData3.filter(data => !search || data.user_name.toLowerCase().includes(search.toLowerCase())||data.userid.toLowerCase().includes(search.toLowerCase()))"
 			tooltip-effect="dark"
 			style="width: 100%"
 			@selection-change="handleSelectionChange">
@@ -74,7 +75,7 @@
 				:current-page.sync="currentPage3"
 				:page-size="pageNum"
 				background
-				layout="prev, pager, next, jumper"
+				layout="total,prev, pager, next, jumper"
 				:total="total1">
 				</el-pagination>
 			</div>
@@ -83,16 +84,20 @@
 	</section>
 </template>
 <script>
+// 表格导出为excel方法
+import FileSaver from 'file-saver'
+import XLSX from 'xlsx'
 import {getmember} from '../../api/api'
   export default {
     data() {
       return {
 				total1:1,
 				page:1,
-				pageNum:4,
+				pageNum:5,
 				currentPage3: 1,
         tableData3: [],
-        multipleSelection: []
+				multipleSelection: [],
+				search: ''
       }
     },
 		mounted(){
@@ -141,7 +146,41 @@ import {getmember} from '../../api/api'
 				console.log(`当前页: ${val}`);
 				this.page=val;
 				this.getlist();
-      }
+			},
+			exportExcel () {
+				this.pageNum = 60;//表格长度变长
+				this.page= 1;
+				this.getlist();
+				var _this=this;
+				this.$confirm('此操作将导出文件, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+					this.$nextTick(function () {
+						let wb = XLSX.utils.table_to_book(document.querySelector('#out-table'));
+						/* get binary string as output */
+						let wbout = XLSX.write(wb, {bookType: 'xlsx', bookSST: true, type: 'array'});
+						try {
+								FileSaver.saveAs(new Blob([wbout], {type: 'application/octet-stream'}), '班级成员表.xlsx')
+						} catch (e) {
+								if (typeof console !== 'undefined') console.log(e, wbout)
+						}
+						 _this.pageNum = 5;//表格还原
+						 _this.getlist();
+						 _this.$message({
+            type: 'success',
+            message: '导出成功!'
+          });
+						return wbout
+				});
+        }).catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消'
+          });          
+        });
+		},
     }
   }
 </script>

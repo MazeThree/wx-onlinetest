@@ -19,10 +19,19 @@ var instance = axios.create({
 export const Login = params => { return instance.post('/api/wx/login.php',qs.stringify(params)).then(res=>res.data); };
 
 // 班级管理
-export const getclasslist= params =>{return instance.get('/api/wx/class/getclassinfo.php').then(res=>res.data);};
+export const getclassinfo= params =>{return instance.get('/api/wx/class/getclassinfo.php').then(res=>res.data);};
 
 //班级空间获取班级成员分页
 export const getmember= params =>{return instance.post('/api/wx/class/getmember.php',qs.stringify(params)).then(res=>res.data);};
+
+//班级空间班级信息
+export const getclasslist= params =>{return instance.post('/api/wx/class/getclasslist.php',qs.stringify(params)).then(res=>res.data);};
+
+//班级空间成员试卷
+export const getuser_paper= params =>{return instance.post('/api/wx/class/user_paper.php',qs.stringify(params)).then(res=>res.data);};
+
+//班级信息修改
+export const classinfo= params =>{return instance.post('/api/wx/class-info/classinfo.php',qs.stringify(params)).then(res=>res.data);};
 
 // 试卷管理
 export const test_new = params => { return instance.post('/api/wx/testpaper/new.php',qs.stringify(params)).then(res=>res.data); };
@@ -51,7 +60,7 @@ export const usernew = params => { return instance.post('/api/wx/user/new.php',q
 //mock模拟数据拦截
 export const requestLogin = params => { return axios.post(`${base}/login`, params).then(res => res.data); };
 
-export const getclassinfo = params => { return axios.get(`${base}/classes/get`, { params: params }); };
+
 
 export const getUserList = params => { return axios.get(`${base}/user/list`, { params: params }); };
 
