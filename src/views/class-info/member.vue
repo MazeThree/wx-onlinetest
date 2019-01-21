@@ -52,19 +52,13 @@
 				<template slot-scope="scope">
 					<el-button
 					size="mini"
-					@click="handleEdit(scope.$index, scope.row)">添加备注</el-button>
-					<el-button
-					size="mini"
-					@click="handleEdit(scope.$index, scope.row)">考过的试题</el-button>
-					<el-button
-					size="mini"
 					type="danger"
 					@click="handleDelete(scope.$index, scope.row)">踢出班级</el-button>
 				</template>
 			</el-table-column>
 		</el-table>
 		<div style="margin-top: 20px">
-			<el-button @click="toggleSelection([tableData3[1], tableData3[2]])">切换第二、第三行的选中状态</el-button>
+			<!-- <el-button @click="toggleSelection([tableData3[1], tableData3[2]])">切换第二、第三行的选中状态</el-button> -->
 			<el-button @click="toggleSelection()">取消选择</el-button>
 			<el-button type="danger" @click="toggleSelection()">删除选中</el-button>
 			<!-- //分页按钮 -->

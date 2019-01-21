@@ -117,7 +117,7 @@
 				</template>
 			</el-tab-pane>
 		</el-tabs>
-	</el-dialog>
+		</el-dialog>
 
 	</section>
 </template>

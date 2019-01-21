@@ -78,7 +78,7 @@
 					<el-button type="primary" @click="sub_que" :loading="sub">提交</el-button>
 				</el-form-item>
         <el-form-item>
-					<el-button type="success" @click="open">暂存</el-button>
+					<el-button type="success" @click="open">从题库导入</el-button>
 				</el-form-item>
 			</el-form>
 		</el-col>
@@ -170,7 +170,7 @@
       </div>
       <div>
         分值：
-        <el-input type="number" style="width:30%;" placeholder="请输入1-150的数字" max="100" v-model="item.score"></el-input>
+        <el-input type="number" style="width:30%;" placeholder="请输入1-150的数字" max="100" v-model="item.que_score"></el-input>
       </div>
     </el-card>
     <el-card v-show="status">
@@ -179,10 +179,22 @@
 					<el-button type="primary" @click="addDomain(2)">多选题&nbsp<i class="el-icon-plus"></i></el-button>
 					<el-button type="primary" @click="addDomain(3)">判断题&nbsp<i class="el-icon-plus"></i></el-button>
 					<el-button type="primary" @click="sub_que" :loading="sub">提交</el-button>
-          <el-button type="success" @click="open">暂存</el-button>
+          <el-button type="success" @click="open">从题库导入</el-button>
       </div>
     </el-card>
   </el-tab-pane>
+
+  <!-- 试题导入遮罩 -->
+    <el-dialog width="90%" title="试卷详情" :visible.sync="dialogTableVisible">
+			<el-tabs type="border-card">
+			<el-tab-pane label="试卷信息">
+        是是是
+			</el-tab-pane>
+			<el-tab-pane label="考试信息">
+				是是是
+			</el-tab-pane>
+		</el-tabs>
+		</el-dialog>
 
   <el-tab-pane label="试卷发布">  
     <el-select
@@ -207,7 +219,7 @@
   <el-card class="box-card" style="margin-top:10px;">
     <div slot="header" class="clearfix">
       <span>已选班级</span>
-      <el-button style="float: right; padding: 3px 0" type="text">操作按钮</el-button>
+      <el-button style="float: right; padding: 3px 0" type="text" >操作按钮</el-button>
     </div>
     <div v-for="item in value9" :key="item.vlaue" class="text item">
       {{'班级ID ' + item }}
@@ -259,7 +271,7 @@
 </template>
 
 <script>
-import {getpaperinfo,getpapermember,update,add_que,getclasslist,paperissue} from '../../api/api'
+import {getpaperinfo,getpapermember,update,add_que,getclassinfo,paperissue,getclasslist} from '../../api/api'
 import { log, callbackify } from 'util';
   export default {
     data() {
@@ -315,7 +327,9 @@ import { log, callbackify } from 'util';
           name: '王小虎',
           address: '上海市普陀区金沙江路 1518 弄'
         }],
-        multipleSelection: []
+        multipleSelection: [],
+        // 遮罩
+        dialogTableVisible: false,
       }
     },
 
@@ -380,8 +394,22 @@ import { log, callbackify } from 'util';
           option3:'xx',
           option4:'xx',
           correct_option:['A'],
-          score:'2'
+          que_score:'2'
           // key: Date.now()
+        });
+      },
+      //加载已有试题
+      loadque(){
+        var params={
+          type:3,
+          id:this.$route.params.test_id
+        };
+        getclasslist(params).then(data => {
+          for(let i=0;i<data.length;i++){
+            delete data[i].id;
+            delete data[i].test_id;
+            this.queForm.push(data[i]);
+          }
         });
       },
       //提交确认
@@ -416,13 +444,12 @@ import { log, callbackify } from 'util';
           });          
         });
       },
-      //暂存功能
-      open: function () {
-				this.$message('已临时保存，但未提交至数据库');
+      open(){
+        this.dialogTableVisible = true;
       },
       //获取班级列表
       getclassinfo(){
-        getclasslist().then(data =>{
+        getclassinfo().then(data =>{
           for(let i=0;i<data.length;i++){
             delete data[i].class_time;
             delete data[i].class_join;
@@ -456,7 +483,7 @@ import { log, callbackify } from 'util';
           }, 200);
           }
         } else {
-          this.options4 = [''];
+          this.options4 = this.list;
         }
       },
       // 试卷发布
@@ -494,6 +521,7 @@ import { log, callbackify } from 'util';
     mounted() {
         this.getinfo();
         this.getclassinfo();
+        this.loadque();
         sessionStorage.setItem("paper_id",this.$route.params.test_id);        
       }
   }
