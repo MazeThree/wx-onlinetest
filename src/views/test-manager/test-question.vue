@@ -1,77 +1,164 @@
 <template>
-<el-form :model="dynamicValidateForm" ref="dynamicValidateForm" label-width="100px" style="width:60%;min-width:350px;" class="demo-dynamic">
-  <el-form-item
-    prop="email"
-    label="邮箱"
-    :rules="[
-      { required: true, message: '请输入邮箱地址', trigger: 'blur' },
-      { type: 'email', message: '请输入正确的邮箱地址', trigger: ['blur', 'change'] }
-    ]"
-  >
-    <el-input v-model="dynamicValidateForm.email"></el-input>
-  </el-form-item>
-  <el-form-item
-    v-for="(domain, index) in dynamicValidateForm.domains"
-    :label="'域名' + index"
-    :key="domain.key"
-    :prop="'domains.' + index + '.value'"
-    :rules="{
-      required: true, message: '域名不能为空', trigger: 'blur'
-    }"
-  >
-    <el-input v-model="domain.value"></el-input>
-    <el-button @click.prevent="removeDomain(domain)">删除</el-button>
-  </el-form-item>
-  <el-form-item>
-    <el-button type="primary" @click="submitForm('dynamicValidateForm')">提交</el-button>
-    <el-button @click="addDomain">新增域名</el-button>
-    <el-button @click="resetForm('dynamicValidateForm')">重置</el-button>
-  </el-form-item>
-</el-form>
+<div>
+  <!--工具条-->
+	<el-col :span="24" class="toolbar" style=" padding-bottom: 0px;">
+		<el-form :inline="true" style="float:left">
+			<el-form-item>
+      <input type="file" id="file22" @change="import1('file22')" />
+			</el-form-item>
+			<el-form-item>
+				<el-button type="primary" @click="sub()" class="el-icon-upload">提交</el-button>
+			</el-form-item>
+		</el-form>
+	</el-col> 
+
+<el-table
+    height="350"
+    ref="multipleTable"
+    :data="tableData3"
+    v-loading="loading"
+    tooltip-effect="dark"
+    style="width: 100%"
+    @selection-change="handleSelectionChange">
+    <el-table-column
+      type="selection"
+      width="55">
+    </el-table-column>
+    <el-table-column
+      prop="type"
+      label="题型"
+      width="80">
+    </el-table-column>
+    <el-table-column
+      prop="question"
+      label="问题"
+      show-overflow-tooltip>
+    </el-table-column>
+    <el-table-column
+      prop="optionA"
+      label="选项A"
+      show-overflow-tooltip>
+    </el-table-column>
+    <el-table-column
+      prop="optionB"
+      label="选项B"
+      show-overflow-tooltip>
+    </el-table-column>
+    <el-table-column
+      prop="optionC"
+      label="选项C"
+      show-overflow-tooltip>
+    </el-table-column>
+    <el-table-column
+      prop="optionD"
+      label="选项D"
+      show-overflow-tooltip>
+    </el-table-column>
+    <el-table-column
+      prop="correct_option"
+      label="正确选项">
+    </el-table-column>
+  </el-table>
+  <div style="margin-top: 20px">
+    <el-button @click="toggleSelection()">取消选择</el-button>
+    <el-button type="danger" @click="deleteRow()">删除选中</el-button>
+  </div>
+</div>
 </template>
-
 <script>
-  export default {
-    data() {
-      return {
-        dynamicValidateForm: {
-          domains: [{
-            value: ''
-          }],
-          email: ''
-        }
-      };
-    },
-    methods: {
-      submitForm(formName) {
-        this.$refs[formName].validate((valid) => {
-          if (valid) {
-            alert('submit!');
-          } else {
-            console.log('error submit!!');
-            return false;
-          }
-        });
-      },
-      resetForm(formName) {
-        this.$refs[formName].resetFields();
-      },
-      removeDomain(item) {
-        var index = this.dynamicValidateForm.domains.indexOf(item)
-        if (index !== -1) {
-          this.dynamicValidateForm.domains.splice(index, 1)
-        }
-      },
-      addDomain() {
-        this.dynamicValidateForm.domains.push({
-          value: '',
-          key: Date.now()
-        });
-      }
+export default {
+  data() {
+    return {
+      tableData3: [],
+        loading:false,
+        multipleSelection: [],
     }
+  },
+  methods: {
+    //文件导入，需调用excel导入的插件xlsx,详情见excel.js,方法已挂载，直接调用
+    import1(a){
+      this.loading=true
+      this.$importf(a).then(data => {
+        this.loading=false;
+        //console.log(data);
+        for(var i=0,l=data.length;i<l;i++){
+          //考虑到导入数据为json对象，但导入键名无法统一，且数据不一定规整，所以无法通过键名进行取值，故将对象转为字符串，对字符串进行拆分取值
+          // let a=JSON.stringify(data[i]).split(",");
+          // let arr1=[];
+          // for(let b=0;b<4;b++){
+          //   let c=a[b].split(":");
+          //   arr1.push(c[1]);
+          // }
+          //拆分后汉字带有双引号，该方法弃用
+          //嵌套实现json对象不规则键名的值的遍历
+          var arr1=[];
+          for(var j in data[i]){
+            // console.log(data[i][j]);
+            arr1.push(data[i][j])
+          }
+           //console.log(arr1);
+          this.tableData3.push({
+            type:arr1[0],
+            question:arr1[1],
+            optionA:arr1[2],
+            optionB:arr1[3],
+            optionC:arr1[4],
+            optionD:arr1[5],
+            correct_option:arr1[6]
+          });
+        }
+      });
+    },
+    toggleSelection(rows) {
+        if (rows) {
+          rows.forEach(row => {
+            this.$refs.multipleTable.toggleRowSelection(row);
+          });
+        } else {
+          this.$refs.multipleTable.clearSelection();
+        }
+      },
+      handleSelectionChange(val) {
+        this.multipleSelection = val;
+      },
+      //删除选中
+      deleteRow() {
+        //获取选中列
+        let arr=this.multipleSelection
+        this.$confirm('将删除选中行，是否继续？','提示',{
+          confirmButtonText:'确定',
+          cancelButtonText:'取消',
+          type:'warning'
+        }).then(()=>{
+          //加1是因为两者起始位置不一样
+            for(let i=0;i<arr.length+1;i++){
+              this.tableData3.splice(arr[i],i)
+            };
+            this.$message({
+              message: '删除成功',
+              type: 'success'
+            });
+        })      
+        },
+        //上传数据
+        sub:function(){
+          this.$confirm('将上传至数据库，请确定数据有效性，是否继续？','提示',{
+          confirmButtonText:'确定',
+          cancelButtonText:'取消',
+          type:'warning'
+        }).then(()=>{
+          //加1是因为两者起始位置不一样
+            for(let i=0;i<arr.length+1;i++){
+              this.tableData3.splice(arr[i],i)
+            };
+            this.$message({
+              message: '上传成功',
+              type: 'success'
+            });
+        })
+        }
+    },
+  mounted() {  
   }
+}
 </script>
-
-<style lang="scss" scoped>
-
-</style>

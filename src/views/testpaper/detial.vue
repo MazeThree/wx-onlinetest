@@ -184,14 +184,17 @@
     </el-card>
   </el-tab-pane>
 
-  <!-- 试题导入遮罩 -->
-    <el-dialog width="90%" title="试卷详情" :visible.sync="dialogTableVisible">
+  <!-- 试题添加遮罩 -->
+    <el-dialog width="90%" title="选择试题" :visible.sync="dialogTableVisible">
 			<el-tabs type="border-card">
-			<el-tab-pane label="试卷信息">
+			<el-tab-pane label="单选题">
         是是是
 			</el-tab-pane>
-			<el-tab-pane label="考试信息">
-				是是是
+			<el-tab-pane label="多选题">
+				<span>请将试题整理为正确格式导入</span>
+			</el-tab-pane>
+      <el-tab-pane label="判断题">
+				<span>请将试题整理为正确格式导入</span>
 			</el-tab-pane>
 		</el-tabs>
 		</el-dialog>
