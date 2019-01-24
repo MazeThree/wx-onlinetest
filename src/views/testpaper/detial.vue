@@ -187,14 +187,16 @@
   <!-- 试题添加遮罩 -->
     <el-dialog width="90%" title="选择试题" :visible.sync="dialogTableVisible">
 			<el-tabs type="border-card">
+        <!-- 利用父子组件传值方法获取试题 -->
 			<el-tab-pane label="单选题">
-        是是是
+        <!-- add_que为子组件传递的参数名称，sonCall为父组件回调方法，用于获取子组件传递的值 -->
+        <IMP v-bind:type="1" v-on:add_que="sonCall"></IMP>
 			</el-tab-pane>
 			<el-tab-pane label="多选题">
-				<span>请将试题整理为正确格式导入</span>
+				<IMP v-bind:type="2"></IMP>
 			</el-tab-pane>
       <el-tab-pane label="判断题">
-				<span>请将试题整理为正确格式导入</span>
+				<IMP v-bind:type="3"></IMP>
 			</el-tab-pane>
 		</el-tabs>
 		</el-dialog>
@@ -229,53 +231,13 @@
     </div>
   </el-card>
   </el-tab-pane>
-
-  <el-tab-pane label="参考人员">
-      <div class="table">
-        <h3>参与考试人员</h3>
-        <el-table
-    ref="multipleTable"
-    :data="tableData3"
-    tooltip-effect="dark"
-    style="width: 100%"
-    @selection-change="handleSelectionChange">
-    <el-table-column
-      type="selection"
-      width="55">
-    </el-table-column>
-    <el-table-column
-      label="日期"
-      width="120">
-      <template slot-scope="scope">{{ scope.row.date }}</template>
-    </el-table-column>
-    <el-table-column
-      prop="name"
-      label="姓名"
-      width="120">
-    </el-table-column>
-    <el-table-column
-      prop="address"
-      label="地址"
-      show-overflow-tooltip>
-    </el-table-column>
-  </el-table>
-    <div style="margin-top: 20px">
-        <div style="float:left;">
-        <el-button type="primary">打印选中<i class="el-icon-upload el-icon--right"></i></el-button>
-        <el-button @click="toggleSelection()">取消选择</el-button>
-        </div>
-    <div style="float:right">
-        分页按钮。。
-    </div>
-    </div>
-  </div>
-  </el-tab-pane>
 </el-tabs>
 </template>
 
 <script>
 import {getpaperinfo,getpapermember,update,add_que,getclassinfo,paperissue,getclasslist} from '../../api/api'
 import { log, callbackify } from 'util';
+import IMP from '../public/import.vue'
   export default {
     data() {
       return {
@@ -320,16 +282,6 @@ import { log, callbackify } from 'util';
         value9: [],
         //远程信息存储
         list: [],
-// 已有成员
-        tableData3: [{
-          date: '2016-05-03',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1518 弄'
-        }, {
-          date: '2016-05-02',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1518 弄'
-        }],
         multipleSelection: [],
         // 遮罩
         dialogTableVisible: false,
@@ -407,11 +359,20 @@ import { log, callbackify } from 'util';
           type:3,
           id:this.$route.params.test_id
         };
+        var params2={
+          type:6,
+          id:this.$route.params.test_id
+        };
         getclasslist(params).then(data => {
           for(let i=0;i<data.length;i++){
             delete data[i].id;
             delete data[i].test_id;
             this.queForm.push(data[i]);
+          }
+        });
+        getclasslist(params2).then(data => {
+          for(let i=0;i<data.length;i++){
+            this.value9.push(data[i].class_id);
           }
         });
       },
@@ -519,6 +480,23 @@ import { log, callbackify } from 'util';
             message: '已取消提交'
           });          
         });
+      },
+      //父子组件传值回调
+      sonCall:function(msg){
+        //console.log(msg);
+        for(let i=0;i<msg.length;i++){
+        this.queForm.push({
+          question:'啧啧啧啧啧啧',
+          type: msg[i][0],
+          option1:msg[i][1],
+          option2:msg[i][2],
+          option3:msg[i][3],
+          option4:msg[i][4],
+          correct_option:msg[i][5],
+          que_score:'2'
+          // key: Date.now()
+        });
+        }
       }
     },
     mounted() {
@@ -526,7 +504,8 @@ import { log, callbackify } from 'util';
         this.getclassinfo();
         this.loadque();
         sessionStorage.setItem("paper_id",this.$route.params.test_id);        
-      }
+      },
+      components:{IMP}
   }
 </script>
 

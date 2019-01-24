@@ -48,14 +48,17 @@ export const update = params =>{ return instance.post('/api/wx/testpaper/updatei
 // 试题发布
 export const paperissue = params =>{ return instance.post('/api/wx/testpaper/issue.php',qs.stringify(params)).then(res=>res.data);};
 
-export const getpapermember = params =>{ return instance.post('/api/wx/testpaper/getmember.php',qs.stringify(params)).then(res=>res.data);};
+// 暂时无用
+// export const getpapermember = params =>{ return instance.post('/api/wx/testpaper/getmember.php',qs.stringify(params)).then(res=>res.data);};
 
 //班级管理
 export const class_new = params => { return instance.post('/api/wx/class/new.php',qs.stringify(params)).then(res=>res.data); };
 export const usernew = params => { return instance.post('/api/wx/user/new.php',qs.stringify(params)).then(res=>res.data); };
 
+//试题导入
+export const add_question = params =>{ return instance.post('/api/wx/question/add_que.php',qs.stringify(params)).then(res=>res.data);};
 
-
+export const get_question = params =>{ return instance.post('/api/wx/question/get_que.php',qs.stringify(params)).then(res=>res.data);};
 
 //mock模拟数据拦截
 export const requestLogin = params => { return axios.post(`${base}/login`, params).then(res => res.data); };

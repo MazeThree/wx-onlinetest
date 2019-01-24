@@ -66,6 +66,7 @@
 </div>
 </template>
 <script>
+import {add_question} from '../../api/api'
 export default {
   data() {
     return {
@@ -142,20 +143,34 @@ export default {
         },
         //上传数据
         sub:function(){
+          if(this.tableData3!=""){
           this.$confirm('将上传至数据库，请确定数据有效性，是否继续？','提示',{
           confirmButtonText:'确定',
           cancelButtonText:'取消',
           type:'warning'
         }).then(()=>{
-          //加1是因为两者起始位置不一样
-            for(let i=0;i<arr.length+1;i++){
-              this.tableData3.splice(arr[i],i)
-            };
-            this.$message({
-              message: '上传成功',
-              type: 'success'
-            });
-        })
+          var Params = this.tableData3;
+         //console.log(Params);
+            add_question(Params).then(data => {
+              let { code,msg } = data;
+              if (code==1) {
+                //防止多次重复提交，减少数据冗余
+                this.tableData3=[];
+                this.$message({
+                  message:"导入成功",
+                  type: 'success'
+                });
+              } else {
+                this.$message({
+                  message:"导入失败，请检查数据结构是否正确",
+                  type:'error',
+                });
+              }
+            }); 
+          })
+        }else{
+          alert("请勿提交空数据！！！");
+        }
         }
     },
   mounted() {  
