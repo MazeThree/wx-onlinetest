@@ -91,7 +91,7 @@ export default {
           //   arr1.push(c[1]);
           // }
           //拆分后汉字带有双引号，该方法弃用
-          //嵌套实现json对象不规则键名的值的遍历
+          //嵌套for循环实现json对象不规则键名的值的遍历
           var arr1=[];
           for(var j in data[i]){
             // console.log(data[i][j]);

@@ -78,9 +78,6 @@
 	</section>
 </template>
 <script>
-// 表格导出为excel方法
-import FileSaver from 'file-saver'
-import XLSX from 'xlsx'
 import {getmember} from '../../api/api'
   export default {
     data() {
@@ -141,6 +138,7 @@ import {getmember} from '../../api/api'
 				this.page=val;
 				this.getlist();
 			},
+			// 可以尝试把这个方法封装
 			exportExcel () {
 				this.pageNum = 60;//表格长度变长
 				this.page= 1;
@@ -151,23 +149,13 @@ import {getmember} from '../../api/api'
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-					this.$nextTick(function () {
-						let wb = XLSX.utils.table_to_book(document.querySelector('#out-table'));
-						/* get binary string as output */
-						let wbout = XLSX.write(wb, {bookType: 'xlsx', bookSST: true, type: 'array'});
-						try {
-								FileSaver.saveAs(new Blob([wbout], {type: 'application/octet-stream'}), '班级成员表.xlsx')
-						} catch (e) {
-								if (typeof console !== 'undefined') console.log(e, wbout)
-						}
+						this.$exportf('#out-table');
 						 _this.pageNum = 5;//表格还原
 						 _this.getlist();
 						 _this.$message({
             type: 'success',
             message: '导出成功!'
-          });
-						return wbout
-				});
+          });  
         }).catch(() => {
           this.$message({
             type: 'info',

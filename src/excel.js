@@ -1,4 +1,5 @@
 import Vue from 'vue'
+import FileSaver from 'file-saver'
 import XLSX from 'xlsx'
  
 /**
@@ -9,6 +10,17 @@ import XLSX from 'xlsx'
  * 例：<input type="file" id="file22" @change="importf('file22')" />
  * this.$importf(id) 得到 json数据
  */
+const exportf = (id) => {
+  let wb = XLSX.utils.table_to_book(document.querySelector(id));
+						/* get binary string as output */
+						let wbout = XLSX.write(wb, {bookType: 'xlsx', bookSST: true, type: 'array'});
+						try {
+								FileSaver.saveAs(new Blob([wbout], {type: 'application/octet-stream'}), '班级成员表.xlsx')
+						} catch (e) {
+								if (typeof console !== 'undefined') console.log(e, wbout)
+						}
+						return wbout
+}
 const importf = (id) => {
   let promise = new Promise((resolve, reject) => {
     // 导入
@@ -67,3 +79,4 @@ const fixdata = (data) => { // 文件流转BinaryString
 }
  
 Vue.prototype.$importf = importf
+Vue.prototype.$exportf = exportf

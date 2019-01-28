@@ -74,16 +74,17 @@ let routes = [
             { path: '/user', component: user, name: '列表' },
         ]
     },
-    {
-        path: '/',
-        component: Home,
-        name: '试卷批阅',
-        iconCls: 'fa fa-id-card-o',
-        children: [
-            { path: '/userinfo', component: userinfo, name: '按班级批阅' },
-            { path: '/usernew', component: usernew, name: '按分类批阅' }
-        ]
-    },
+    //该功能暂时不用
+    // {
+    //     path: '/',
+    //     component: Home,
+    //     name: '试卷批阅',
+    //     iconCls: 'fa fa-id-card-o',
+    //     children: [
+    //         { path: '/userinfo', component: userinfo, name: '按班级批阅' },
+    //         { path: '/usernew', component: usernew, name: '按分类批阅' }
+    //     ]
+    // },
     {
         path: '/',
         component: Home,
