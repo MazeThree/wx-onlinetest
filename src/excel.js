@@ -10,12 +10,12 @@ import XLSX from 'xlsx'
  * 例：<input type="file" id="file22" @change="importf('file22')" />
  * this.$importf(id) 得到 json数据
  */
-const exportf = (id) => {
+const exportf = (id,name) => {
   let wb = XLSX.utils.table_to_book(document.querySelector(id));
 						/* get binary string as output */
 						let wbout = XLSX.write(wb, {bookType: 'xlsx', bookSST: true, type: 'array'});
 						try {
-								FileSaver.saveAs(new Blob([wbout], {type: 'application/octet-stream'}), '班级成员表.xlsx')
+								FileSaver.saveAs(new Blob([wbout], {type: 'application/octet-stream'}), name+'.xlsx')
 						} catch (e) {
 								if (typeof console !== 'undefined') console.log(e, wbout)
 						}

@@ -9,10 +9,14 @@
 				<el-form-item>
 					<el-button type="primary">查询</el-button>
 				</el-form-item>
+        <el-form-item>
+				<el-button type="primary" @click="exportExcel ()" class="el-icon-upload">导出数据</el-button>
+			</el-form-item>
 			</el-form>
 		</el-col>
     <template>
         <el-table
+        id="list"
         :data="tableData"
         style="width: 100%"
         v-loading="loading">
@@ -105,6 +109,9 @@
         handleClick: function(value){
             //alert(value.test_id);
           this.$router.push({name:'试卷详情',params:{test_id:value.test_id}})    
+        },
+        exportExcel:function (){
+          this.$exportf('#list','试卷表');
         }
       },
       mounted() {

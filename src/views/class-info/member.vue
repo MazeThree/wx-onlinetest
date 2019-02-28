@@ -149,7 +149,7 @@ import {getmember} from '../../api/api'
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-						this.$exportf('#out-table');
+						this.$exportf('#out-table','班级成员表');
 						 _this.pageNum = 5;//表格还原
 						 _this.getlist();
 						 _this.$message({

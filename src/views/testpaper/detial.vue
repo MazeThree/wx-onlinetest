@@ -193,10 +193,10 @@
         <IMP v-bind:type="1" v-on:add_que="sonCall"></IMP>
 			</el-tab-pane>
 			<el-tab-pane label="多选题">
-				<IMP v-bind:type="2"></IMP>
+				<IMP v-bind:type="2" v-on:add_que="sonCall"></IMP>
 			</el-tab-pane>
       <el-tab-pane label="判断题">
-				<IMP v-bind:type="3"></IMP>
+				<IMP v-bind:type="3" v-on:add_que="sonCall"></IMP>
 			</el-tab-pane>
 		</el-tabs>
 		</el-dialog>
@@ -505,6 +505,7 @@ import IMP from '../public/import.vue'
         this.loadque();
         sessionStorage.setItem("paper_id",this.$route.params.test_id);        
       },
+      //子组件
       components:{IMP}
   }
 </script>

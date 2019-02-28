@@ -57,7 +57,7 @@ let routes = [
         path:'/',
         component: Home,
         name: '',
-        iconCls: 'fa fa-address-card',
+        iconCls: 'el-icon-menu',
         leaf: true,//只有一个节点
         children: [
             { path: '/main', component: Main, name: '主页',hidden:true }
@@ -67,11 +67,11 @@ let routes = [
         path: '/',
         component: Home,
         name: '班级管理',
-        iconCls: 'el-icon-message',//图标样式class
+        iconCls: 'el-icon-view',//图标样式class
         children: [
             { path: '/classes', component: Classes, name: '我管理的班级' },
             { path: '/create', component: Create, name: '创建班级' },
-            { path: '/user', component: user, name: '列表' },
+            // { path: '/user', component: user, name: '列表' },
         ]
     },
     //该功能暂时不用
@@ -94,7 +94,7 @@ let routes = [
             { path: '/newpaper', component: newpaper, name: '添加试卷' },
             { path: '/paperlist', component: paperlist, name: '已有试卷' },
             { path: '/paperdetial/:test_id', component: paperdetial, name: '试卷详情',hidden:true },
-            { path: '/user', component: user, name: '已发布试题卷' },
+            // { path: '/user', component: user, name: '已发布试题卷' },
     
         ]
     },
@@ -102,7 +102,7 @@ let routes = [
         path: '/',
         component: Home,
         name: '试题管理',
-        iconCls: 'fa fa-address-card',
+        iconCls: 'el-icon-edit',
         children: [
             { path: '/test', component: Test, name: '已有试题' },
             { path: '/test-question', component: Question, name: '添加试题' }
@@ -112,7 +112,7 @@ let routes = [
         path: '/',
         component: Home,
         name: '账户管理',
-        iconCls: 'fa fa-id-card-o',
+        iconCls: 'el-icon-setting',
         children: [
             { path: '/userinfo', component: userinfo, name: '信息修改' },
             { path: '/usernew', component: usernew, name: '添加新用户' },
